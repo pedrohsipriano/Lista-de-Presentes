@@ -25,6 +25,7 @@ if (isset($_GET['id_lista'])) {
 ?>
 <form action="?page=salvar-presente" method="POST" id="presenteForm">
     <input type="hidden" name="acao" value="cadastrar">
+<<<<<<< HEAD
     <input type="hidden" name="id_lista" value="<?php echo $id_lista; ?>"> <!-- Passa o id da lista -->
 
     <div class="mb-3">
@@ -36,11 +37,24 @@ if (isset($_GET['id_lista'])) {
         <!-- Aqui serão gerados os formulários dos presentes -->
     </div>
 
+=======
+    <div class="mb-3">
+        <label for="">Quantos presentes voce quer adicionar?</label>
+        <input type="number" id="quantidade_presente" name="quantidade_presente" class="form-control" value="1" min="1"
+            max="10" onchange="updateForms()">
+    </div>
+    <div id="presenteFields">
+        <!-- Aqui serão gerados os formulários dos presentes -->
+    </div>
+>>>>>>> origin/main
     <div class="mb-3">
         <button type="submit" class="btn btn-success footer">Enviar</button>
     </div>
 </form>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 <script>
     // Função para adicionar os formulários automaticamente
     function updateForms() {
@@ -64,6 +78,7 @@ if (isset($_GET['id_lista'])) {
             </div>
             <div class="form-group">
                 <label for="preco">Preço (R$)</label>
+<<<<<<< HEAD
                 <input type="text" id="preco" name="preco_${i + 1}" class="form-control" placeholder="R$ 0,00" oninput="formatarPreco(this)">
             </div>
             <div class="mb-3">
@@ -72,10 +87,20 @@ if (isset($_GET['id_lista'])) {
             </div>
             <input type="hidden" id="preco_real_${i + 1}" name="preco_real_${i + 1}">
             `;
+=======
+                <input type="text" id="preco" name="preco" class="form-control" placeholder="R$ 0,00" oninput="formatarPreco(this)">
+            </div>
+            <div class="mb-3">
+            <br>
+                <label for="">Imagem - ${i + 1}</label>
+                <input type="text" name="descricao_presente_${i + 1}" class="form-control">
+            </div>`;
+>>>>>>> origin/main
             presenteFields.appendChild(newForm);
         }
     }
 
+<<<<<<< HEAD
     // Chama a função ao carregar a página
     window.onload = updateForms;
 
@@ -102,3 +127,27 @@ if (isset($_GET['id_lista'])) {
         hiddenField.value = valor.replace(/[^\d,]/g, '').replace(',', '.'); // remove formatação e usa ponto como separador decimal
     }
 </script>
+=======
+    // Chama a função ao carregar a página 1250
+    window.onload = updateForms;
+
+    function formatarPreco(element) {
+    let valor = element.value;
+
+    // Remove tudo que não for número ou vírgula
+    valor = valor.replace(/[^\d]/g, '');
+
+    // Se o valor tiver mais de dois dígitos, insere a vírgula antes dos dois últimos números
+    if (valor.length > 2) {
+        valor = valor.replace(/(\d{1,})(\d{2})$/, '$1,$2');
+    }
+
+    // Adiciona ponto como separador de milhar
+    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    // Coloca "R$" no começo e atribui o valor formatado
+    element.value = 'R$ ' + valor;
+}
+
+</script>
+>>>>>>> origin/main

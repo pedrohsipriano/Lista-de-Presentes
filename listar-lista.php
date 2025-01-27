@@ -38,7 +38,10 @@ if ($qtd > 0) {
         print "    <div style='display: flex; gap: 10px;'>"; // Usando flexbox para alinhar os botões lado a lado
         print "        <button class='btn btn-success' style='width: 100px;' onclick=\"location.href='?page=editar-lista&id_lista=" . $row->id_lista . "';\">Editar</button>";
         print "        <button class='btn btn-primary' style='width: 100px;' onclick=\"location.href='?page=cadastrar-presente&id_lista=" . $row->id_lista . "';\">Adicionar Presente</button>";
+<<<<<<< HEAD
         print "        <button class='btn btn-primary' style='width: 100px;' onclick=\"location.href='?page=listar-presente&id_lista=" . $row->id_lista . "';\">Presentes cadastrados</button>";
+=======
+>>>>>>> origin/main
         print "        <button class='btn btn-danger' style='width: 100px;' onclick=\"if(confirm('Tem certeza que deseja excluir?')) {location.href='?page=salvar-lista&acao=excluir&id_lista=" . $row->id_lista . "';} else {false;}\">Excluir</button>";
         print "    </div>";
         "</td>";
