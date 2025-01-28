@@ -1,60 +1,56 @@
 <?php
-
 session_start();
+require_once "../config.php"; // Conexão com o banco
 
-// Incluindo o arquivo de configuração
-require_once "../config.php";
-
-// Inicializando as variáveis de erro
 $error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validação de campos
-    if (isset($_POST["nome_usuario"]) && isset($_POST["email_usuario"]) && isset($_POST["senha_usuario"])) {
-        $nome_usuario = $_POST["nome_usuario"];
-        $email_usuario = $_POST["email_usuario"];
-        $senha_usuario = $_POST["senha_usuario"];
-        
-        // Preparando a consulta SQL para evitar SQL Injection
-        $sql = "SELECT * FROM usuario WHERE nome_usuario = ? AND email_usuario = ?";
+    // Validação de campos (verifica se não estão vazios)
+    if (!empty($_POST["email_usuario"]) && !empty($_POST["senha_usuario"])) {
+        $email_usuario = trim($_POST["email_usuario"]);
+        $senha_usuario = trim($_POST["senha_usuario"]);
+
+        // Consulta SQL para buscar o usuário pelo email
+        $sql = "SELECT * FROM usuario WHERE email_usuario = ?";
         $stmt = $conn->prepare($sql);
-        
-        // Verificando se a preparação da consulta foi bem-sucedida
+
         if ($stmt === false) {
             die("Erro na preparação da consulta: " . $conn->error);
         }
 
-        // Vinculando os parâmetros
-        $stmt->bind_param("ss", $nome_usuario, $email_usuario);
-        
-        // Executando a consulta
+        $stmt->bind_param("s", $email_usuario);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Verificando se o usuário foi encontrado
         if ($result->num_rows === 1) {
             $row = $result->fetch_assoc();
             // Verificando se a senha está correta
             if (password_verify($senha_usuario, $row["senha_usuario"])) {
-                $_SESSION["loggedin"] = true;  // Definindo a sessão
-                $_SESSION["usuario_id"] = $row["id_usuario"];  // Salvando o ID do usuário na sessão
-                // Redireciona para a página inicial (index.php) após login bem-sucedido
+                // Configurando variáveis de sessão
+                $_SESSION["loggedin"] = true;
+                $_SESSION["usuario_id"] = $row["id_usuario"];
+                $_SESSION["nome_usuario"] = $row["nome_usuario"];
+
+                // Redireciona para o index
                 header("Location: ../index.php");
-                exit(); // Evita que o script continue
+                exit();
             } else {
-                // Senha incorreta
                 $error = "Senha incorreta.";
             }
         } else {
-            // Usuário não encontrado
-            $error = "Usuário ou email incorretos.";
+            $error = "Usuário não encontrado.";
         }
 
-        // Fechando a consulta
         $stmt->close();
     } else {
-        // Caso algum campo não tenha sido preenchido
         $error = "Por favor, preencha todos os campos.";
     }
+}
+
+// Exibe a mensagem de erro com alerta JavaScript
+if (!empty($error)) {
+    echo "<script>alert('$error');</script>";
+    echo "<script>location.href='login-usuario.php';</script>";
+    exit();
 }
 ?>
